@@ -13,8 +13,23 @@ spring:
           search-paths:
             - springcloud-config  #搜索目录，仓库名字
       label: master
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:7001/eureka
+
+# 暴露bus刷新配置的端点
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "bus-refresh"  #curl -X POST "http://localhost:3344/actuator/bus-refresh"
+        #bus是向config server发送上述命令，然后由server通知所有注册到server上的client进行修改
+        #curl -X POST "http://localhost:3344/actuator/bus-refresh/config-client:3355"只通知3355
